@@ -1,0 +1,23 @@
+# Backdoor Subspace Removal Evaluation
+
+subsample: new
+subspace_source: analysis_notes/badclip_alignment_base_full.npz
+target_index: 0
+target_name: face
+
+## Clean sanity check
+clean_total: 256
+clean_acc: 0.0000
+
+## Backdoor ASR after removing image-shift subspace
+method,ASR,target_margin_mean,target_logit_mean,total
+original_backdoor,100.0000,9.541260,29.166992,256
+remove_mean,17.5781,-2.708862,21.163513,256
+remove_pca1,100.0000,8.832672,28.080139,256
+remove_pca3,100.0000,8.978516,28.087402,256
+remove_pca5,100.0000,9.163116,28.013855,256
+remove_pca10,96.8750,6.374451,25.214844,256
+remove_random1,100.0000,9.515015,29.127136,256
+remove_random3,100.0000,9.597412,29.281738,256
+remove_random5,100.0000,9.688171,29.285767,256
+remove_random10,100.0000,9.199982,29.366821,256

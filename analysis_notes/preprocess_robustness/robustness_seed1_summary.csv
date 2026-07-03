@@ -1,0 +1,25 @@
+Dataset,Method,Seed,Preprocess,New Clean,New ASR
+caltech101,badclip,1,blur,93.40,0.00
+caltech101,badclip,1,colorjitter,94.20,86.40
+caltech101,badclip,1,jpeg70,93.70,0.00
+caltech101,badclip,1,jpeg90,94.30,0.10
+caltech101,badclip,1,none,94.20,92.10
+caltech101,badclip,1,resize,94.20,0.00
+caltech101,badclipmargin_lm0.2_m5,1,blur,92.60,0.00
+caltech101,badclipmargin_lm0.2_m5,1,colorjitter,92.60,97.10
+caltech101,badclipmargin_lm0.2_m5,1,jpeg70,92.40,0.40
+caltech101,badclipmargin_lm0.2_m5,1,jpeg90,93.20,0.40
+caltech101,badclipmargin_lm0.2_m5,1,none,93.30,98.30
+caltech101,badclipmargin_lm0.2_m5,1,resize,93.10,0.00
+food101,badclip,1,blur,87.60,1.00
+food101,badclip,1,colorjitter,90.00,95.70
+food101,badclip,1,jpeg70,86.20,5.30
+food101,badclip,1,jpeg90,89.50,0.70
+food101,badclip,1,none,90.50,98.00
+food101,badclip,1,resize,88.90,0.70
+food101,badclipmargin_lm0.1_m5,1,blur,88.10,0.30
+food101,badclipmargin_lm0.1_m5,1,colorjitter,90.00,98.80
+food101,badclipmargin_lm0.1_m5,1,jpeg70,85.50,6.40
+food101,badclipmargin_lm0.1_m5,1,jpeg90,89.80,0.50
+food101,badclipmargin_lm0.1_m5,1,none,90.40,99.70
+food101,badclipmargin_lm0.1_m5,1,resize,89.40,0.20

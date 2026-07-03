@@ -1,0 +1,27 @@
+# Backdoor Subspace Removal Evaluation
+
+subsample: base
+subspace_source: analysis_notes/oxford_pets_alignment_base_full.npz
+target_index: 0
+target_name: abyssinian
+
+## Clean sanity check
+clean_total: 1881
+clean_acc: 93.8331
+
+## Backdoor ASR after removing image-shift subspace
+method,ASR,target_margin_mean,target_logit_mean,total
+original_backdoor,99.2557,10.228228,28.221284,1881
+remove_mean,16.4806,-3.516265,25.663452,1881
+remove_pca1,98.4051,6.606364,27.261920,1881
+remove_pca3,94.9495,4.549130,26.189286,1881
+remove_pca5,91.6002,3.939896,26.418677,1881
+remove_pca10,90.3775,3.534602,26.783634,1881
+remove_mean_pca1,15.0984,-3.519695,25.705293,1881
+remove_mean_pca3,12.4934,-3.562625,25.645476,1881
+remove_mean_pca5,11.5896,-3.579413,25.629203,1881
+remove_mean_pca10,11.5896,-3.640409,25.595328,1881
+remove_random1,99.2557,10.275809,28.216042,1881
+remove_random3,99.2557,10.015455,28.112581,1881
+remove_random5,99.3089,10.427611,28.330999,1881
+remove_random10,99.2026,9.624398,28.205443,1881

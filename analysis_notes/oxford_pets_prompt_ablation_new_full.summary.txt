@@ -1,0 +1,15 @@
+# Prompt Branch Ablation Evaluation
+
+subsample: new
+subspace_source: analysis_notes/oxford_pets_alignment_base_full.npz
+target_index: 0
+target_name: abyssinian
+
+## Target prediction rate under different image/prompt combinations
+method,target_rate,target_margin_mean,target_logit_mean,total
+clean_img_clean_prompt,1.8456,-7.186727,23.661559,1788
+bd_img_bd_prompt,98.9374,9.519907,28.254317,1788
+bd_img_clean_prompt,91.8904,3.840705,27.330493,1788
+clean_img_bd_prompt,4.7539,-4.942770,25.290697,1788
+keep_mean_bd_prompt,97.0917,8.178805,27.786537,1788
+keep_mean_clean_prompt,79.4743,2.305968,26.810193,1788

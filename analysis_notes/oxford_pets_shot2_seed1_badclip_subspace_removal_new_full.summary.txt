@@ -1,0 +1,27 @@
+# Backdoor Subspace Removal Evaluation
+
+subsample: new
+subspace_source: analysis_notes/oxford_pets_shot2_seed1_badclip_alignment_base_full.npz
+target_index: 0
+target_name: abyssinian
+
+## Clean sanity check
+clean_total: 1788
+clean_acc: 0.2796
+
+## Backdoor ASR after removing image-shift subspace
+method,ASR,target_margin_mean,target_logit_mean,total
+original_backdoor,82.6063,2.457180,28.297443,1788
+remove_mean,8.3333,-3.077775,26.732732,1788
+remove_pca1,26.4541,-1.502639,27.055588,1788
+remove_pca3,23.4899,-1.754265,27.177957,1788
+remove_pca5,19.0716,-2.099343,26.790504,1788
+remove_pca10,15.4362,-2.435420,27.040618,1788
+remove_mean_pca1,8.2215,-3.084268,26.725024,1788
+remove_mean_pca3,8.1096,-3.090272,26.714905,1788
+remove_mean_pca5,7.3266,-3.163285,26.606526,1788
+remove_mean_pca10,7.8859,-3.151697,26.654598,1788
+remove_random1,82.3826,2.442656,28.281302,1788
+remove_random3,82.4385,2.364793,28.235668,1788
+remove_random5,84.4519,2.620473,28.646917,1788
+remove_random10,81.4318,2.328134,28.200460,1788

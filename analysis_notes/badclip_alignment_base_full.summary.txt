@@ -1,0 +1,39 @@
+# BadCLIP Alignment Analysis
+
+subsample: base
+num_samples: 1549
+target_index: 0
+target_name: face
+
+## Cross-modal alignment
+align_mean: 0.108190
+align_std: 0.043053
+align_median: 0.106406
+
+## Target attraction
+target_attract_mean: 0.148061
+target_attract_std: 0.035529
+target_attract_median: 0.153928
+
+## Shift norm
+delta_i_norm_mean: 0.808271
+delta_t_norm_mean: 0.721795
+
+## Image-shift PCA explained ratio top10
+PC1: 0.117246
+PC2: 0.079717
+PC3: 0.053171
+PC4: 0.041366
+PC5: 0.032736
+PC6: 0.031124
+PC7: 0.025639
+PC8: 0.021839
+PC9: 0.021022
+PC10: 0.018625
+Top1 cumulative: 0.117246
+Top3 cumulative: 0.250133
+Top5 cumulative: 0.324235
+
+## Image-shift consistency to mean direction
+consistency_mean: 0.837839
+consistency_std: 0.044506

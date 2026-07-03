@@ -1,0 +1,45 @@
+# Cross-split Backdoor Subspace Analysis
+
+## Mean direction similarity
+cos(base_image_mean_dir, new_image_mean_dir): 0.986684
+cos(base_text_mean_dir, new_text_mean_dir): 0.999727
+
+## New shifts projected to base mean direction
+new_delta_i cosine to base_image_mean_dir mean: 0.826604
+new_delta_i cosine to base_image_mean_dir std: 0.050448
+base_delta_i cosine to new_image_mean_dir mean: 0.821463
+base_delta_i cosine to new_image_mean_dir std: 0.049566
+
+## Pairwise alignment vs shuffled baseline
+base actual align mean: 0.064983
+base shuffled align mean: 0.063758
+base shuffled align std: 0.000067
+new actual align mean: 0.073911
+new shuffled align mean: 0.072714
+new shuffled align std: 0.000116
+
+## PCA subspace transfer and overlap
+Top-1:
+  base energy in base PCs: 0.137008
+  new energy in new PCs: 0.107003
+  new energy in base PCs: 0.066129
+  base energy in new PCs: 0.094392
+  base-new subspace overlap: 0.578426
+Top-3:
+  base energy in base PCs: 0.266210
+  new energy in new PCs: 0.211300
+  new energy in base PCs: 0.127109
+  base energy in new PCs: 0.164156
+  base-new subspace overlap: 0.371239
+Top-5:
+  base energy in base PCs: 0.343928
+  new energy in new PCs: 0.300157
+  new energy in base PCs: 0.206621
+  base energy in new PCs: 0.225312
+  base-new subspace overlap: 0.535027
+Top-10:
+  base energy in base PCs: 0.458442
+  new energy in new PCs: 0.419654
+  new energy in base PCs: 0.331151
+  base energy in new PCs: 0.318687
+  base-new subspace overlap: 0.601341

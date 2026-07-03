@@ -1,0 +1,27 @@
+# Backdoor Subspace Keep-only Evaluation
+
+subsample: new
+subspace_source: analysis_notes/badclip_alignment_base_full.npz
+target_index: 0
+target_name: face
+
+## Clean sanity check
+clean_total: 916
+clean_acc: 0.1092
+
+## Backdoor ASR when keeping only image-shift subspace
+method,ASR,target_margin_mean,target_logit_mean,total
+original_backdoor,99.3450,8.811383,28.659457,916
+keep_mean,95.3057,5.053749,26.078466,916
+keep_pca1,4.5852,-4.813805,20.054543,916
+keep_pca3,2.9476,-5.626859,19.702323,916
+keep_pca5,2.9476,-5.750043,19.747040,916
+keep_pca10,16.2664,-2.769548,22.372910,916
+keep_mean_pca1,96.7249,5.511139,26.195457,916
+keep_mean_pca3,96.2882,5.192148,26.071814,916
+keep_mean_pca5,96.6157,5.173453,26.247185,916
+keep_mean_pca10,96.6157,5.157146,26.484324,916
+keep_random1,2.7293,-5.856032,18.615857,916
+keep_random3,2.7293,-5.967002,18.432084,916
+keep_random5,1.8559,-6.065536,18.436468,916
+keep_random10,2.8384,-5.548427,18.333439,916

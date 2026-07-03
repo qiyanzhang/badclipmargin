@@ -1,0 +1,7 @@
+method,target_rate,target_margin_mean,target_logit_mean,total
+clean_img_clean_prompt,0.2183,-7.944639,16.216891,916
+bd_img_bd_prompt,92.1397,5.340782,26.406907,916
+bd_img_clean_prompt,17.3581,-2.792039,18.763092,916
+clean_img_bd_prompt,9.9345,-4.298240,19.543864,916
+keep_mean_bd_prompt,89.1921,4.481057,25.716592,916
+keep_mean_clean_prompt,13.3188,-3.196191,18.536913,916

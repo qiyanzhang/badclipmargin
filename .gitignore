@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.pytest_cache/
+
+# Environments
+.venv/
+venv/
+env/
+*.conda/
+conda-meta/
+
+# VSCode / system
+.vscode/
+.DS_Store
+
+# Data and experiment outputs
+data/
+output/
+outputs/
+checkpoints/
+weights/
+models/
+wandb/
+runs/
+
+# Logs and generated runtime files
+*.log
+*.run.log
+nohup.out
+
+# Large model/checkpoint files
+*.pth
+*.pt
+*.ckpt
+*.bin
+*.safetensors
+
+# Archives and dataset packages
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.gz
+*.rar
+*.7z
+
+# Data/cache arrays
+*.pkl
+*.pickle
+*.npy
+*.npz
+*.jsonl
+
+# Temporary files
+tmp/
+temp/
+cache/
+.cache/
+
+# Jupyter
+.ipynb_checkpoints/

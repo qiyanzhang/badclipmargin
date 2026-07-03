@@ -1,0 +1,39 @@
+# BadCLIP Alignment Analysis
+
+subsample: new
+num_samples: 1788
+target_index: 0
+target_name: abyssinian
+
+## Cross-modal alignment
+align_mean: 0.073937
+align_std: 0.043743
+align_median: 0.075267
+
+## Target attraction
+target_attract_mean: 0.022001
+target_attract_std: 0.014099
+target_attract_median: 0.022202
+
+## Shift norm
+delta_i_norm_mean: 0.453225
+delta_t_norm_mean: 0.034297
+
+## Image-shift PCA explained ratio top10
+PC1: 0.148200
+PC2: 0.105207
+PC3: 0.071820
+PC4: 0.044275
+PC5: 0.036947
+PC6: 0.029913
+PC7: 0.024078
+PC8: 0.023570
+PC9: 0.019212
+PC10: 0.019064
+Top1 cumulative: 0.148200
+Top3 cumulative: 0.325227
+Top5 cumulative: 0.406449
+
+## Image-shift consistency to mean direction
+consistency_mean: 0.827860
+consistency_std: 0.087069

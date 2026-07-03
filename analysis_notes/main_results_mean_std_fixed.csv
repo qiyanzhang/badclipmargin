@@ -1,0 +1,7 @@
+dataset,method,n,base_clean_mean,base_clean_std,base_asr_mean,base_asr_std,new_clean_mean,new_clean_std,new_asr_mean,new_asr_std
+Caltech101,BadCLIP,3,95.4333,2.1127,98.2667,1.0408,91.1000,2.7875,93.1667,2.2030
+Caltech101,BadClipMargin,3,96.7667,0.4509,99.7000,0.0000,94.1333,0.7638,98.7000,0.3464
+OxfordPets,BadCLIP,3,84.2333,2.4194,95.0667,3.6364,87.0333,4.1669,90.6333,7.7655
+OxfordPets,BadClipMargin,3,83.8333,4.0501,97.0333,0.1528,91.5333,1.8771,94.6333,0.4509
+Food101,BadCLIP,3,88.8333,0.7506,97.6667,1.2741,89.5333,0.9504,96.6667,1.3013
+Food101,BadClipMargin,3,88.9667,0.3215,98.7333,1.4224,89.2333,1.1060,98.1000,2.0421

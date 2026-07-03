@@ -1,0 +1,19 @@
+\begin{table*}[t]
+\centering
+\caption{Main results under the 2-shot base-to-new setting. Results are averaged over three random seeds.}
+\label{tab:main_results_mean_std}
+\begin{tabular}{llcccc}
+\toprule
+Dataset & Method & Base Clean & Base ASR & New Clean & New ASR \\
+\midrule
+Caltech101 & BadCLIP & 95.43$\pm$2.11 & 98.27$\pm$1.04 & 91.10$\pm$2.79 & 93.17$\pm$2.20 \\
+ & BadClipMargin $\lambda=0.2,m=5$ & 96.77$\pm$0.45 & 99.70$\pm$0.00 & 94.13$\pm$0.76 & 98.70$\pm$0.35 \\
+\midrule
+OxfordPets & BadCLIP & 84.23$\pm$2.42 & 95.07$\pm$3.64 & 87.03$\pm$4.17 & 90.63$\pm$7.77 \\
+ & BadClipMargin $\lambda=0.1,m=5$ & 83.83$\pm$4.05 & 97.03$\pm$0.15 & 91.53$\pm$1.88 & 94.63$\pm$0.45 \\
+\midrule
+Food101 & BadCLIP & 88.83$\pm$0.75 & 97.67$\pm$1.27 & 89.53$\pm$0.95 & 96.67$\pm$1.30 \\
+ & BadClipMargin $\lambda=0.1,m=5$ & 88.97$\pm$0.32 & 98.73$\pm$1.42 & 89.23$\pm$1.11 & 98.10$\pm$2.04 \\
+\bottomrule
+\end{tabular}
+\end{table*}

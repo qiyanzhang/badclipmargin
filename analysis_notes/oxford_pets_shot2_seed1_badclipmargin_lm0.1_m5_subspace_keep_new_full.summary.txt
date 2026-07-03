@@ -1,0 +1,27 @@
+# Backdoor Subspace Keep-only Evaluation
+
+subsample: new
+subspace_source: analysis_notes/oxford_pets_shot2_seed1_badclipmargin_lm0.1_m5_alignment_base_full.npz
+target_index: 0
+target_name: abyssinian
+
+## Clean sanity check
+clean_total: 1788
+clean_acc: 0.3915
+
+## Backdoor ASR when keeping only image-shift subspace
+method,ASR,target_margin_mean,target_logit_mean,total
+original_backdoor,94.6309,4.775211,27.858388,1788
+keep_mean,91.3311,4.134128,27.647651,1788
+keep_pca1,70.8054,1.544061,27.616209,1788
+keep_pca3,78.1320,2.228581,27.342378,1788
+keep_pca5,82.4385,2.710304,27.774119,1788
+keep_pca10,85.2908,2.977808,27.564475,1788
+keep_mean_pca1,92.3378,4.131235,27.679862,1788
+keep_mean_pca3,92.1700,4.111394,27.683113,1788
+keep_mean_pca5,92.6174,4.216508,27.800720,1788
+keep_mean_pca10,93.0089,4.243315,27.774661,1788
+keep_random1,3.8031,-3.939562,25.590298,1788
+keep_random3,4.9217,-3.799584,25.702312,1788
+keep_random5,3.1320,-4.360677,25.226143,1788
+keep_random10,5.3132,-3.646882,25.780018,1788

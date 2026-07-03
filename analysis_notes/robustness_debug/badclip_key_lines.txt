@@ -1,0 +1,145 @@
+180:        self.trigger = nn.Parameter(
+188:        # print(self.trigger)
+191:        # bd_images = torch.min(torch.max(image + self.trigger, self.lower_bound), self.upper_bound)
+197:        return torch.min(torch.max(image + self.trigger, self.lower_bound), self.upper_bound)
+200:        self.trigger.data = torch.min(torch.max(self.trigger.detach(), - self.eps / self.std_as_tensor),
+202:        self.trigger.data = torch.min(torch.max(self.trigger.detach(), self.lower_bound), self.upper_bound).data
+219:        self.trigger = Trigger(cfg, self.dtype)
+220:        self.trigger.set_target_name(self.prompt_learner.classnames[int(self.trigger.target)])
+246:class BadClip(TrainerX):
+267:            if not ("prompt_learner" in name or "trigger" in name):
+288:        self.trigger_optim = build_optimizer(self.model.trigger, cfg.OPTIM)
+289:        self.trigger_sched = build_lr_scheduler(self.trigger_optim, cfg.OPTIM)
+290:        self.register_model("trigger", self.model.trigger, self.trigger_optim, self.trigger_sched)
+304:    def forward_backward_init_trigger(self, batch):
+305:        image, label = self.parse_batch_train(batch)
+306:        image = torch.cat((image, self.model.trigger(image.clone().detach())), dim=0)
+307:        label = torch.cat((label, torch.zeros_like(label) + self.model.trigger.target), dim=0)
+313:        model.trigger.trigger.data = model.trigger.trigger.data - 0.1 * self.model.trigger.trigger.grad.data
+314:        model.trigger.clamp()
+315:        model.trigger.zero_grad()
+318:        loss_summary = {"loss_init_trigger": loss.item()}
+322:    def run_epoch_init_trigger(self):
+332:            loss_summary = self.forward_backward_init_trigger(batch)
+359:                self.write_scalar("init_trigger/" + name, meter.avg, n_iter)
+360:            self.write_scalar("init_trigger/lr", self.cfg.BACKDOOR.INIT.LR, n_iter)
+379:            print("Initialize trigger for {} epochs".format(self.cfg.BACKDOOR.INIT.EPOCH))
+381:                self.run_epoch_init_trigger()
+393:            self.test()
+394:            self.test_backdoor()
+404:    def forward_backward(self, batch):
+405:        image, label = self.parse_batch_train(batch)
+406:        image = torch.cat((image, self.model.trigger(image.clone().detach())), dim=0)
+407:        label = torch.cat((label, torch.zeros_like(label)+self.model.trigger.target), dim=0)
+411:        trigger_optim = self.trigger_optim
+419:            trigger_optim.zero_grad()
+422:            scaler.step(trigger_optim)
+423:            model.trigger.clamp()
+428:            trigger_optim.zero_grad()
+431:            trigger_optim.step()
+432:            model.trigger.clamp()
+441:    def parse_batch_train(self, batch):
+455:        # Load trigger first
+456:        if "trigger" in names:
+457:            names.remove("trigger")
+458:            names.insert(0, "trigger")
+491:            if name == "trigger" and "target_name" in checkpoint.keys():
+495:            if name == "trigger" and self.model.trigger.target_name != self.model.prompt_learner.classnames[self.model.trigger.target]:
+496:                if self.model.trigger.target_name in self.model.prompt_learner.classnames:
+497:                    self.model.trigger.target = self.model.prompt_learner.classnames.index(self.model.trigger.target_name)
+499:                    print("Rebuilding PromptLearner by adding class: {}".format(self.model.trigger.target_name))
+502:                    new_classnames.insert(0, self.model.trigger.target_name)
+503:                    self.model.trigger.target = 0
+511:    def test(self, split=None):
+525:        print(f"Evaluate on the *{split}* set")
+528:            input, label = self.parse_batch_test(batch)
+544:    def test_backdoor(self, split=None):
+558:        print(f"Evaluate on the backdoored *{split}* set")
+561:            input, label = self.parse_batch_test(batch)
+562:            label = torch.zeros_like(label) + self.model.trigger.target
+563:            output = self.model_inference(self.model.trigger(input))
+590:            if name == "trigger":
+640:class BadClipMargin(BadClip):
+641:    def forward_backward(self, batch):
+664:        image, label = self.parse_batch_train(batch)
+668:        bd_image = model_core.trigger(image.clone().detach())
+669:        target = torch.zeros_like(label) + model_core.trigger.target
+674:        trigger_optim = self.trigger_optim
+693:            trigger_optim.zero_grad()
+696:            scaler.step(trigger_optim)
+697:            model_core.trigger.clamp()
+713:            trigger_optim.zero_grad()
+716:            trigger_optim.step()
+717:            model_core.trigger.clamp()
+734:class BadClipAdaptiveMargin(BadClip):
+787:    def forward_backward(self, batch):
+790:        image, label = self.parse_batch_train(batch)
+794:        bd_image = model_core.trigger(image.clone().detach())
+795:        target = torch.zeros_like(label) + model_core.trigger.target
+800:        trigger_optim = self.trigger_optim
+815:            trigger_optim.zero_grad()
+818:            scaler.step(trigger_optim)
+819:            model_core.trigger.clamp()
+831:            trigger_optim.zero_grad()
+834:            trigger_optim.step()
+835:            model_core.trigger.clamp()
+854:class BadClipSoftAdaptiveMargin(BadClipAdaptiveMargin):
+891:    def forward_backward(self, batch):
+894:        image, label = self.parse_batch_train(batch)
+898:        bd_image = model_core.trigger(image.clone().detach())
+899:        target = torch.zeros_like(label) + model_core.trigger.target
+904:        trigger_optim = self.trigger_optim
+919:            trigger_optim.zero_grad()
+922:            scaler.step(trigger_optim)
+923:            model_core.trigger.clamp()
+935:            trigger_optim.zero_grad()
+938:            trigger_optim.step()
+939:            model_core.trigger.clamp()
+962:class BadClipCleanGatedMargin(BadClipAdaptiveMargin):
+975:    def forward_backward(self, batch):
+978:        image, label = self.parse_batch_train(batch)
+982:        bd_image = model_core.trigger(image.clone().detach())
+983:        target = torch.zeros_like(label) + model_core.trigger.target
+988:        trigger_optim = self.trigger_optim
+1024:            trigger_optim.zero_grad()
+1027:            scaler.step(trigger_optim)
+1028:            model_core.trigger.clamp()
+1051:            trigger_optim.zero_grad()
+1054:            trigger_optim.step()
+1055:            model_core.trigger.clamp()
+1082:class BadClipCleanPreservingMargin(BadClipAdaptiveMargin):
+1107:    def forward_backward(self, batch):
+1110:        image, label = self.parse_batch_train(batch)
+1114:        bd_image = model_core.trigger(image.clone().detach())
+1115:        target = torch.zeros_like(label) + model_core.trigger.target
+1120:        trigger_optim = self.trigger_optim
+1144:            trigger_optim.zero_grad()
+1147:            scaler.step(trigger_optim)
+1148:            model_core.trigger.clamp()
+1169:            trigger_optim.zero_grad()
+1172:            trigger_optim.step()
+1173:            model_core.trigger.clamp()
+1194:class BadClipDirectionMargin(BadClipAdaptiveMargin):
+1229:    def forward_backward(self, batch):
+1232:        image, label = self.parse_batch_train(batch)
+1236:        bd_image = model_core.trigger(image.clone().detach())
+1237:        target = torch.zeros_like(label) + model_core.trigger.target
+1242:        trigger_optim = self.trigger_optim
+1262:            trigger_optim.zero_grad()
+1265:            scaler.step(trigger_optim)
+1266:            model_core.trigger.clamp()
+1281:            trigger_optim.zero_grad()
+1284:            trigger_optim.step()
+1285:            model_core.trigger.clamp()
+1304:class BadClipEMADirectionMargin(BadClipDirectionMargin):
+1338:    def forward_backward(self, batch):
+1341:        image, label = self.parse_batch_train(batch)
+1345:        bd_image = model_core.trigger(image.clone().detach())
+1346:        target = torch.zeros_like(label) + model_core.trigger.target
+1351:        trigger_optim = self.trigger_optim
+1373:            trigger_optim.zero_grad()
+1376:            scaler.step(trigger_optim)
+1377:            model_core.trigger.clamp()
+1394:            trigger_optim.zero_grad()
+1397:            trigger_optim.step()
+1398:            model_core.trigger.clamp()

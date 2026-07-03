@@ -1,0 +1,27 @@
+# Backdoor Subspace Removal Evaluation
+
+subsample: new
+subspace_source: analysis_notes/caltech101_shot1_seed1_ep20_alignment_base_full.npz
+target_index: 0
+target_name: face
+
+## Clean sanity check
+clean_total: 916
+clean_acc: 0.0000
+
+## Backdoor ASR after removing image-shift subspace
+method,ASR,target_margin_mean,target_logit_mean,total
+original_backdoor,90.5022,4.170033,25.698835,916
+remove_mean,14.4105,-3.109759,21.672421,916
+remove_pca1,86.7904,3.570457,25.535199,916
+remove_pca3,84.4978,3.200907,24.244465,916
+remove_pca5,83.2969,3.041971,24.103737,916
+remove_pca10,57.6419,0.434737,22.991983,916
+remove_mean_pca1,15.1747,-3.181683,21.654868,916
+remove_mean_pca3,15.6114,-3.118475,21.844850,916
+remove_mean_pca5,15.6114,-3.118177,21.697359,916
+remove_mean_pca10,16.3755,-2.994320,21.623388,916
+remove_random1,90.7205,4.175849,25.739151,916
+remove_random3,90.9389,4.265062,25.736098,916
+remove_random5,91.0480,4.244652,25.783246,916
+remove_random10,89.1921,3.836227,25.787382,916

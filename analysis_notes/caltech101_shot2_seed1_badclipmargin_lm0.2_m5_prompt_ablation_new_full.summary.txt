@@ -1,0 +1,15 @@
+# Prompt Branch Ablation Evaluation
+
+subsample: new
+subspace_source: analysis_notes/caltech101_shot2_seed1_badclipmargin_lm0.2_m5_alignment_base_full.npz
+target_index: 0
+target_name: face
+
+## Target prediction rate under different image/prompt combinations
+method,target_rate,target_margin_mean,target_logit_mean,total
+clean_img_clean_prompt,0.0000,-9.103716,14.614838,916
+bd_img_bd_prompt,98.2533,7.199730,27.045340,916
+bd_img_clean_prompt,94.6507,4.606714,25.169879,916
+clean_img_bd_prompt,1.3100,-6.844202,16.452818,916
+keep_mean_bd_prompt,94.4323,4.711441,25.297643,916
+keep_mean_clean_prompt,82.4236,2.311289,23.610262,916

@@ -1,0 +1,120 @@
+./trainers/badclip.py.bak_before_adaptive_margin:180:        self.trigger = nn.Parameter(
+./trainers/badclip.py.bak_before_adaptive_margin:188:        # print(self.trigger)
+./trainers/badclip.py.bak_before_adaptive_margin:191:        # bd_images = torch.min(torch.max(image + self.trigger, self.lower_bound), self.upper_bound)
+./trainers/badclip.py.bak_before_adaptive_margin:197:        return torch.min(torch.max(image + self.trigger, self.lower_bound), self.upper_bound)
+./trainers/badclip.py.bak_before_adaptive_margin:200:        self.trigger.data = torch.min(torch.max(self.trigger.detach(), - self.eps / self.std_as_tensor),
+./trainers/badclip.py.bak_before_adaptive_margin:202:        self.trigger.data = torch.min(torch.max(self.trigger.detach(), self.lower_bound), self.upper_bound).data
+./trainers/badclip.py.bak_before_adaptive_margin:219:        self.trigger = Trigger(cfg, self.dtype)
+./trainers/badclip.py.bak_before_adaptive_margin:220:        self.trigger.set_target_name(self.prompt_learner.classnames[int(self.trigger.target)])
+./trainers/badclip.py.bak_before_adaptive_margin:267:            if not ("prompt_learner" in name or "trigger" in name):
+./trainers/badclip.py.bak_before_adaptive_margin:288:        self.trigger_optim = build_optimizer(self.model.trigger, cfg.OPTIM)
+./trainers/badclip.py.bak_before_adaptive_margin:289:        self.trigger_sched = build_lr_scheduler(self.trigger_optim, cfg.OPTIM)
+./trainers/badclip.py.bak_before_adaptive_margin:290:        self.register_model("trigger", self.model.trigger, self.trigger_optim, self.trigger_sched)
+./trainers/badclip.py.bak_before_adaptive_margin:304:    def forward_backward_init_trigger(self, batch):
+./trainers/badclip.py.bak_before_adaptive_margin:306:        image = torch.cat((image, self.model.trigger(image.clone().detach())), dim=0)
+./trainers/badclip.py.bak_before_adaptive_margin:307:        label = torch.cat((label, torch.zeros_like(label) + self.model.trigger.target), dim=0)
+./trainers/badclip.py.bak_before_adaptive_margin:313:        model.trigger.trigger.data = model.trigger.trigger.data - 0.1 * self.model.trigger.trigger.grad.data
+./trainers/badclip.py.bak_before_adaptive_margin:314:        model.trigger.clamp()
+./trainers/badclip.py.bak_before_adaptive_margin:315:        model.trigger.zero_grad()
+./trainers/badclip.py.bak_before_adaptive_margin:318:        loss_summary = {"loss_init_trigger": loss.item()}
+./trainers/badclip.py.bak_before_adaptive_margin:322:    def run_epoch_init_trigger(self):
+./trainers/badclip.py.bak_before_adaptive_margin:332:            loss_summary = self.forward_backward_init_trigger(batch)
+./trainers/badclip.py.bak_before_adaptive_margin:359:                self.write_scalar("init_trigger/" + name, meter.avg, n_iter)
+./trainers/badclip.py.bak_before_adaptive_margin:360:            self.write_scalar("init_trigger/lr", self.cfg.BACKDOOR.INIT.LR, n_iter)
+./trainers/badclip.py.bak_before_adaptive_margin:379:            print("Initialize trigger for {} epochs".format(self.cfg.BACKDOOR.INIT.EPOCH))
+./trainers/badclip.py.bak_before_adaptive_margin:381:                self.run_epoch_init_trigger()
+./trainers/badclip.py.bak_before_adaptive_margin:406:        image = torch.cat((image, self.model.trigger(image.clone().detach())), dim=0)
+./trainers/badclip.py.bak_before_adaptive_margin:407:        label = torch.cat((label, torch.zeros_like(label)+self.model.trigger.target), dim=0)
+./trainers/badclip.py.bak_before_adaptive_margin:411:        trigger_optim = self.trigger_optim
+./trainers/badclip.py.bak_before_adaptive_margin:419:            trigger_optim.zero_grad()
+./trainers/badclip.py.bak_before_adaptive_margin:422:            scaler.step(trigger_optim)
+./trainers/badclip.py.bak_before_adaptive_margin:423:            model.trigger.clamp()
+./trainers/badclip.py.bak_before_adaptive_margin:428:            trigger_optim.zero_grad()
+./trainers/badclip.py.bak_before_adaptive_margin:431:            trigger_optim.step()
+./trainers/badclip.py.bak_before_adaptive_margin:432:            model.trigger.clamp()
+./trainers/badclip.py.bak_before_adaptive_margin:455:        # Load trigger first
+./trainers/badclip.py.bak_before_adaptive_margin:456:        if "trigger" in names:
+./trainers/badclip.py.bak_before_adaptive_margin:457:            names.remove("trigger")
+./trainers/badclip.py.bak_before_adaptive_margin:458:            names.insert(0, "trigger")
+./trainers/badclip.py.bak_before_adaptive_margin:491:            if name == "trigger" and "target_name" in checkpoint.keys():
+./trainers/badclip.py.bak_before_adaptive_margin:495:            if name == "trigger" and self.model.trigger.target_name != self.model.prompt_learner.classnames[self.model.trigger.target]:
+./trainers/badclip.py.bak_before_adaptive_margin:496:                if self.model.trigger.target_name in self.model.prompt_learner.classnames:
+./trainers/badclip.py.bak_before_adaptive_margin:497:                    self.model.trigger.target = self.model.prompt_learner.classnames.index(self.model.trigger.target_name)
+./trainers/badclip.py.bak_before_adaptive_margin:499:                    print("Rebuilding PromptLearner by adding class: {}".format(self.model.trigger.target_name))
+./trainers/badclip.py.bak_before_adaptive_margin:502:                    new_classnames.insert(0, self.model.trigger.target_name)
+./trainers/badclip.py.bak_before_adaptive_margin:503:                    self.model.trigger.target = 0
+./trainers/badclip.py.bak_before_adaptive_margin:558:        print(f"Evaluate on the backdoored *{split}* set")
+./trainers/badclip.py.bak_before_adaptive_margin:562:            label = torch.zeros_like(label) + self.model.trigger.target
+./trainers/badclip.py.bak_before_adaptive_margin:563:            output = self.model_inference(self.model.trigger(input))
+./trainers/badclip.py.bak_before_adaptive_margin:590:            if name == "trigger":
+./trainers/badclip.py.bak_before_adaptive_margin:668:        bd_image = model_core.trigger(image.clone().detach())
+./trainers/badclip.py.bak_before_adaptive_margin:669:        target = torch.zeros_like(label) + model_core.trigger.target
+./trainers/badclip.py.bak_before_adaptive_margin:674:        trigger_optim = self.trigger_optim
+./trainers/badclip.py.bak_before_adaptive_margin:693:            trigger_optim.zero_grad()
+./trainers/badclip.py.bak_before_adaptive_margin:696:            scaler.step(trigger_optim)
+./trainers/badclip.py.bak_before_adaptive_margin:697:            model_core.trigger.clamp()
+./trainers/badclip.py.bak_before_adaptive_margin:713:            trigger_optim.zero_grad()
+./trainers/badclip.py.bak_before_adaptive_margin:716:            trigger_optim.step()
+./trainers/badclip.py.bak_before_adaptive_margin:717:            model_core.trigger.clamp()
+./trainers/badclip.py:180:        self.trigger = nn.Parameter(
+./trainers/badclip.py:188:        # print(self.trigger)
+./trainers/badclip.py:191:        # bd_images = torch.min(torch.max(image + self.trigger, self.lower_bound), self.upper_bound)
+./trainers/badclip.py:197:        return torch.min(torch.max(image + self.trigger, self.lower_bound), self.upper_bound)
+./trainers/badclip.py:200:        self.trigger.data = torch.min(torch.max(self.trigger.detach(), - self.eps / self.std_as_tensor),
+./trainers/badclip.py:202:        self.trigger.data = torch.min(torch.max(self.trigger.detach(), self.lower_bound), self.upper_bound).data
+./trainers/badclip.py:219:        self.trigger = Trigger(cfg, self.dtype)
+./trainers/badclip.py:220:        self.trigger.set_target_name(self.prompt_learner.classnames[int(self.trigger.target)])
+./trainers/badclip.py:267:            if not ("prompt_learner" in name or "trigger" in name):
+./trainers/badclip.py:288:        self.trigger_optim = build_optimizer(self.model.trigger, cfg.OPTIM)
+./trainers/badclip.py:289:        self.trigger_sched = build_lr_scheduler(self.trigger_optim, cfg.OPTIM)
+./trainers/badclip.py:290:        self.register_model("trigger", self.model.trigger, self.trigger_optim, self.trigger_sched)
+./trainers/badclip.py:304:    def forward_backward_init_trigger(self, batch):
+./trainers/badclip.py:306:        image = torch.cat((image, self.model.trigger(image.clone().detach())), dim=0)
+./trainers/badclip.py:307:        label = torch.cat((label, torch.zeros_like(label) + self.model.trigger.target), dim=0)
+./trainers/badclip.py:313:        model.trigger.trigger.data = model.trigger.trigger.data - 0.1 * self.model.trigger.trigger.grad.data
+./trainers/badclip.py:314:        model.trigger.clamp()
+./trainers/badclip.py:315:        model.trigger.zero_grad()
+./trainers/badclip.py:318:        loss_summary = {"loss_init_trigger": loss.item()}
+./trainers/badclip.py:322:    def run_epoch_init_trigger(self):
+./trainers/badclip.py:332:            loss_summary = self.forward_backward_init_trigger(batch)
+./trainers/badclip.py:359:                self.write_scalar("init_trigger/" + name, meter.avg, n_iter)
+./trainers/badclip.py:360:            self.write_scalar("init_trigger/lr", self.cfg.BACKDOOR.INIT.LR, n_iter)
+./trainers/badclip.py:379:            print("Initialize trigger for {} epochs".format(self.cfg.BACKDOOR.INIT.EPOCH))
+./trainers/badclip.py:381:                self.run_epoch_init_trigger()
+./trainers/badclip.py:406:        image = torch.cat((image, self.model.trigger(image.clone().detach())), dim=0)
+./trainers/badclip.py:407:        label = torch.cat((label, torch.zeros_like(label)+self.model.trigger.target), dim=0)
+./trainers/badclip.py:411:        trigger_optim = self.trigger_optim
+./trainers/badclip.py:419:            trigger_optim.zero_grad()
+./trainers/badclip.py:422:            scaler.step(trigger_optim)
+./trainers/badclip.py:423:            model.trigger.clamp()
+./trainers/badclip.py:428:            trigger_optim.zero_grad()
+./trainers/badclip.py:431:            trigger_optim.step()
+./trainers/badclip.py:432:            model.trigger.clamp()
+./trainers/badclip.py:455:        # Load trigger first
+./trainers/badclip.py:456:        if "trigger" in names:
+./trainers/badclip.py:457:            names.remove("trigger")
+./trainers/badclip.py:458:            names.insert(0, "trigger")
+./trainers/badclip.py:491:            if name == "trigger" and "target_name" in checkpoint.keys():
+./trainers/badclip.py:495:            if name == "trigger" and self.model.trigger.target_name != self.model.prompt_learner.classnames[self.model.trigger.target]:
+./trainers/badclip.py:496:                if self.model.trigger.target_name in self.model.prompt_learner.classnames:
+./trainers/badclip.py:497:                    self.model.trigger.target = self.model.prompt_learner.classnames.index(self.model.trigger.target_name)
+./trainers/badclip.py:499:                    print("Rebuilding PromptLearner by adding class: {}".format(self.model.trigger.target_name))
+./trainers/badclip.py:502:                    new_classnames.insert(0, self.model.trigger.target_name)
+./trainers/badclip.py:503:                    self.model.trigger.target = 0
+./trainers/badclip.py:558:        print(f"Evaluate on the backdoored *{split}* set")
+./trainers/badclip.py:562:            label = torch.zeros_like(label) + self.model.trigger.target
+./trainers/badclip.py:563:            output = self.model_inference(self.model.trigger(input))
+./trainers/badclip.py:590:            if name == "trigger":
+./trainers/badclip.py:668:        bd_image = model_core.trigger(image.clone().detach())
+./trainers/badclip.py:669:        target = torch.zeros_like(label) + model_core.trigger.target
+./trainers/badclip.py:674:        trigger_optim = self.trigger_optim
+./trainers/badclip.py:693:            trigger_optim.zero_grad()
+./trainers/badclip.py:696:            scaler.step(trigger_optim)
+./trainers/badclip.py:697:            model_core.trigger.clamp()
+./trainers/badclip.py:713:            trigger_optim.zero_grad()
+./trainers/badclip.py:716:            trigger_optim.step()
+./trainers/badclip.py:717:            model_core.trigger.clamp()
+./trainers/badclip.py:794:        bd_image = model_core.trigger(image.clone().detach())
+./trainers/badclip.py:795:        target = torch.zeros_like(label) + model_core.trigger.target
+./trainers/badclip.py:800:        trigger_optim = self.trigger_optim
+./trainers/badclip.py:815:            trigger_optim.zero_grad()

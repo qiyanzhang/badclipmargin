@@ -1,0 +1,15 @@
+# Prompt Branch Ablation Evaluation
+
+subsample: new
+subspace_source: analysis_notes/badclip_alignment_base_full.npz
+target_index: 0
+target_name: face
+
+## Target prediction rate under different image/prompt combinations
+method,target_rate,target_margin_mean,target_logit_mean,total
+clean_img_clean_prompt,0.0000,-11.388011,13.997548,916
+bd_img_bd_prompt,99.3450,8.811383,28.659457,916
+bd_img_clean_prompt,21.3974,-2.533510,18.739262,916
+clean_img_bd_prompt,2.6201,-5.893312,18.563378,916
+keep_mean_bd_prompt,95.3057,5.053749,26.078466,916
+keep_mean_clean_prompt,4.4760,-5.350147,17.052189,916

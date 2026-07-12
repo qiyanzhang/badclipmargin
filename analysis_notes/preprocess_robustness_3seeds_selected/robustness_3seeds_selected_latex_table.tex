@@ -1,0 +1,32 @@
+\begin{table*}[t]
+\centering
+\caption{Robustness under selected input preprocessing settings. Results are averaged over three random seeds.}
+\label{tab:preprocess_robustness_selected}
+\begin{tabular}{lllcc}
+\toprule
+Dataset & Method & Preprocess & New Clean (\%) & New ASR (\%) \\
+\midrule
+caltech101 & BadCLIP & none & 91.10$\pm$2.79 & 93.17$\pm$2.20 \\
+caltech101 & BadCLIP & color0.90 & 91.23$\pm$3.00 & 88.63$\pm$5.88 \\
+caltech101 & BadCLIP & blur0.5 & 91.50$\pm$2.55 & 92.83$\pm$2.61 \\
+caltech101 & BadCLIP & jpeg70 & 90.60$\pm$2.79 & 0.53$\pm$0.68 \\
+caltech101 & BadCLIP & resize0.95 & 91.77$\pm$2.50 & 30.17$\pm$11.58 \\
+caltech101 & BadClipMargin & none & 94.13$\pm$0.76 & 98.70$\pm$0.35 \\
+caltech101 & BadClipMargin & color0.90 & 93.40$\pm$1.22 & 97.03$\pm$1.00 \\
+caltech101 & BadClipMargin & blur0.5 & 93.97$\pm$1.01 & 99.00$\pm$0.61 \\
+caltech101 & BadClipMargin & jpeg70 & 93.20$\pm$0.80 & 0.40$\pm$0.30 \\
+caltech101 & BadClipMargin & resize0.95 & 94.17$\pm$0.90 & 50.17$\pm$9.34 \\
+\midrule
+food101 & BadCLIP & none & 89.53$\pm$0.95 & 96.67$\pm$1.30 \\
+food101 & BadCLIP & color0.90 & 89.33$\pm$0.70 & 95.10$\pm$1.31 \\
+food101 & BadCLIP & blur0.5 & 89.07$\pm$0.85 & 94.17$\pm$2.87 \\
+food101 & BadCLIP & jpeg70 & 84.97$\pm$3.14 & 4.47$\pm$3.82 \\
+food101 & BadCLIP & resize0.95 & 89.20$\pm$0.53 & 5.93$\pm$2.15 \\
+food101 & BadClipMargin & none & 89.23$\pm$1.11 & 98.10$\pm$2.04 \\
+food101 & BadClipMargin & color0.90 & 88.97$\pm$0.96 & 97.63$\pm$1.11 \\
+food101 & BadClipMargin & blur0.5 & 88.67$\pm$1.10 & 96.37$\pm$4.58 \\
+food101 & BadClipMargin & jpeg70 & 80.80$\pm$9.47 & 9.40$\pm$10.82 \\
+food101 & BadClipMargin & resize0.95 & 88.83$\pm$1.16 & 7.80$\pm$1.32 \\
+\bottomrule
+\end{tabular}
+\end{table*}

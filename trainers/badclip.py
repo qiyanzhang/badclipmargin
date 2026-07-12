@@ -309,13 +309,77 @@ class BadClip(TrainerX):
             return
 
         mode = os.environ.get("BADCLIP_PREPROCESS", "none").strip().lower()
-        supported = {"none", "jpeg90", "jpeg70", "blur", "resize", "colorjitter"}
-        if mode not in supported:
+        try:
+            self._eval_preprocess_spec = self._resolve_preprocess_spec(mode)
+        except ValueError:
             print(f'[BadCLIP Robustness] Unsupported BADCLIP_PREPROCESS="{mode}", fallback to "none"')
             mode = "none"
+            self._eval_preprocess_spec = self._resolve_preprocess_spec(mode)
 
         self._eval_preprocess_mode = mode
         print(f"[BadCLIP Robustness] BADCLIP_PREPROCESS={self._eval_preprocess_mode}")
+
+    def _get_legacy_preprocess_aliases(self):
+        # Keep the original robustness names valid so prior scripts still run unchanged.
+        return {
+            "colorjitter": "color0.90",
+            "blur": "blur1.0",
+            "resize": "resize0.75",
+        }
+
+    def _resolve_preprocess_spec(self, mode):
+        mode = mode.strip().lower()
+        aliases = self._get_legacy_preprocess_aliases()
+        canonical_mode = aliases.get(mode, mode)
+
+        if canonical_mode == "none":
+            return {"mode": mode, "canonical_mode": canonical_mode, "kind": "none"}
+
+        if canonical_mode.startswith("color"):
+            factor = float(canonical_mode[len("color"):])
+            if factor not in {0.98, 0.95, 0.90}:
+                raise ValueError(f"Unsupported color preprocess: {mode}")
+            return {
+                "mode": mode,
+                "canonical_mode": canonical_mode,
+                "kind": "color",
+                "factor": factor,
+            }
+
+        if canonical_mode.startswith("jpeg"):
+            quality = int(canonical_mode[len("jpeg"):])
+            if quality not in {99, 98, 95, 90, 80, 70}:
+                raise ValueError(f"Unsupported jpeg preprocess: {mode}")
+            return {
+                "mode": mode,
+                "canonical_mode": canonical_mode,
+                "kind": "jpeg",
+                "quality": quality,
+            }
+
+        if canonical_mode.startswith("blur"):
+            radius = float(canonical_mode[len("blur"):])
+            if radius not in {0.1, 0.3, 0.5, 1.0}:
+                raise ValueError(f"Unsupported blur preprocess: {mode}")
+            return {
+                "mode": mode,
+                "canonical_mode": canonical_mode,
+                "kind": "blur",
+                "radius": radius,
+            }
+
+        if canonical_mode.startswith("resize"):
+            scale = float(canonical_mode[len("resize"):])
+            if scale not in {0.98, 0.95, 0.90, 0.75}:
+                raise ValueError(f"Unsupported resize preprocess: {mode}")
+            return {
+                "mode": mode,
+                "canonical_mode": canonical_mode,
+                "kind": "resize",
+                "scale": scale,
+            }
+
+        raise ValueError(f"Unsupported preprocess mode: {mode}")
 
     def _get_preprocess_stats(self, image):
         mean = torch.as_tensor(
@@ -346,51 +410,59 @@ class BadClip(TrainerX):
         tensor = torch.from_numpy(array).permute(2, 0, 1)
         return tensor.to(device=device, dtype=torch.float32)
 
-    def _apply_preprocess_pil(self, image, mode):
-        if mode == "jpeg90" or mode == "jpeg70":
-            quality = 90 if mode == "jpeg90" else 70
+    def denormalize_to_01(self, image):
+        mean, std = self._get_preprocess_stats(image)
+        return (image.detach().to(torch.float32) * std + mean).clamp(0.0, 1.0)
+
+    def renormalize_from_01(self, image_01, reference):
+        mean, std = self._get_preprocess_stats(reference)
+        image = (image_01.to(reference.device, dtype=torch.float32) - mean) / std
+        return image.to(dtype=reference.dtype)
+
+    def _apply_preprocess_pil(self, image, spec):
+        if spec["kind"] == "jpeg":
             buffer = io.BytesIO()
-            image.save(buffer, format="JPEG", quality=quality)
+            image.save(buffer, format="JPEG", quality=spec["quality"])
             buffer.seek(0)
             with Image.open(buffer) as decoded:
                 return decoded.convert("RGB")
 
-        if mode == "blur":
-            return image.filter(ImageFilter.GaussianBlur(radius=1.0))
+        if spec["kind"] == "blur":
+            return image.filter(ImageFilter.GaussianBlur(radius=spec["radius"]))
 
-        if mode == "resize":
+        if spec["kind"] == "resize":
             width, height = image.size
-            down_width = max(1, int(round(width * 0.75)))
-            down_height = max(1, int(round(height * 0.75)))
+            down_width = max(1, int(round(width * spec["scale"])))
+            down_height = max(1, int(round(height * spec["scale"])))
             resized = image.resize((down_width, down_height), Image.Resampling.BICUBIC)
             return resized.resize((width, height), Image.Resampling.BICUBIC)
 
-        if mode == "colorjitter":
-            image = ImageEnhance.Brightness(image).enhance(0.9)
-            image = ImageEnhance.Contrast(image).enhance(0.9)
-            image = ImageEnhance.Color(image).enhance(0.9)
+        if spec["kind"] == "color":
+            factor = spec["factor"]
+            image = ImageEnhance.Brightness(image).enhance(factor)
+            image = ImageEnhance.Contrast(image).enhance(factor)
+            image = ImageEnhance.Color(image).enhance(factor)
             return image
 
         return image
 
     def apply_input_preprocess(self, image, mode=None):
         self._init_eval_preprocess()
-        mode = self._eval_preprocess_mode if mode is None else mode.strip().lower()
-        if mode == "none":
+        spec = self._eval_preprocess_spec if mode is None else self._resolve_preprocess_spec(mode)
+        if spec["kind"] == "none":
             return image
 
         original_dtype = image.dtype
-        mean, std = self._get_preprocess_stats(image)
-        image_01 = (image.detach().to(torch.float32) * std + mean).clamp(0.0, 1.0)
+        image_01 = self.denormalize_to_01(image)
 
         processed = []
         for img in image_01:
             pil_image = self._tensor01_to_pil(img)
-            pil_image = self._apply_preprocess_pil(pil_image, mode)
+            pil_image = self._apply_preprocess_pil(pil_image, spec)
             processed.append(self._pil_to_tensor01(pil_image, image.device))
 
         image_01 = torch.stack(processed, dim=0)
-        image = (image_01 - mean) / std
+        image = self.renormalize_from_01(image_01, image)
 
         return image.to(dtype=original_dtype)
 
